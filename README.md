@@ -1,82 +1,73 @@
-`# Secure Voting System with Paillier Encryption
+# Secure Voting System with Paillier Encryption
 
 ## Introduction
 
 In this article, we present a secure voting system leveraging Partial Homomorphic Encryption (PHE) to ensure complete voter privacy. The system ensures both voter identities and votes remain concealed from all participants on the network. Paillier encryption, a form of PHE, is employed for its ability to perform computations on encrypted data without revealing the plaintext. Although similar outcomes could be achieved with other cryptosystems like ElGamal, Paillier strikes a balance between privacy and computational feasibility. The system's design supports applications beyond voting, including quizzes and surveys, and is adaptable for both server-side and client-side operations, making it suitable for decentralized platforms such as blockchains.
-Getting Started
----------------
+
+## Getting Started
+
 ### Features
 
--   **Secure Voting:** Utilizes Paillier encryption to secure votes during transmission and storage, ensuring confidentiality.
--   **Anonymity:** Implements zero-knowledge proofs (ZKP) for verifying vote validity without revealing voter identity.
--   **Scalable:** Designed with modularity and decentralization to handle varying scales of elections.
--   **User-friendly Interface:** Provides intuitive user interfaces for voters and administrators to manage the voting process.
-To run this project locally, follow these steps:
+- **Secure Voting:** Utilizes Paillier encryption to secure votes during transmission and storage, ensuring confidentiality.
+- **Anonymity:** Implements zero-knowledge proofs (ZKP) for verifying vote validity without revealing voter identity.
+- **Scalable:** Designed with modularity and decentralization to handle varying scales of elections.
+- **User-friendly Interface:** Provides intuitive user interfaces for voters and administrators to manage the voting process.
 
 ### Prerequisites
 
--   Node.js installed on your machine
--   npm (Node Package Manager)
+- Node.js installed on your machine
+- npm (Node Package Manager)
 
 ### Installation
 
-1.  Clone the repository:
+1. Clone the repository:
 
-    bash
+    ```bash
+    git clone <repository-url>
+    cd voting-system-react
+    ```
 
-    Copy code
+2. Install dependencies for both backend and frontend:
 
-    `git clone <repository-url>
-    cd voting-system-react`
-
-2.  Install dependencies for both backend and frontend:
-
-    bash
-
-    Copy code
-
-    `cd server
+    ```bash
+    cd server
     npm install
     cd ../client
-    npm install`
+    npm install
+    ```
 
-3.  Generate Paillier encryption keys:
+3. Generate Paillier encryption keys:
 
-    bash
-
-    Copy code
-
-    `cd server
-    npm run generate-keys`
+    ```bash
+    cd server
+    npm run generate-keys
+    ```
 
 ### Running the Application
 
-1.  Start the backend server:
+1. Start the backend server:
 
-    bash
+    ```bash
+    cd server
+    npm start
+    ```
 
-    Copy code
+   The server will start running on `http://localhost:5000`.
 
-    `cd server
-    npm start`
+2. Start the frontend application:
 
-    The server will start running on `http://localhost:5000`.
+    ```bash
+    cd client
+    npm start
+    ```
 
-2.  Start the frontend application:
-
-    bash
-
-    Copy code
-
-    `cd client
-    npm start`
-
-    The frontend development server will start and open in your default browser at `http://localhost:3000`.
+   The frontend development server will start and open in your default browser at `http://localhost:3000`.
 
 ### Usage
 
--   **Admin Panel (`/admin`):** Add contestants, start the voting process.
--   **User Panel (`/`):** View contestants, vote securely using Paillier encryption.
+- **Admin Panel (`/admin`):** Add contestants, start the voting process.
+- **User Panel (`/`):** View contestants, vote securely using Paillier encryption.
+
 ## General Flow
 
 ### Organizer
@@ -110,15 +101,11 @@ const encoded = VoteEncoder.encodeSingle(choice, numChoices, bitsPerChoice);
 // encoded = 256
 
 const decoded = VoteEncoder.decode(encoded, numChoices, bitsPerChoice);
-// decoded = [0, 1, 0] `
-
-#### Encode a Multiple-Choice Vote
-
+// decoded = [0, 1, 0]
+Encode a Multiple-Choice Vote
 javascript
-
 Copy code
-
-`import { VoteEncoder } from "phe-voting-js";
+import { VoteEncoder } from "phe-voting-js";
 
 const numChoices = 3;
 const choices = [0, 1]; // Alice and Bob
@@ -128,50 +115,34 @@ const encoded = VoteEncoder.encodeMultiple(choices, numChoices, bitsPerChoice);
 // encoded = 257
 
 const decoded = VoteEncoder.decode(encoded, numChoices, bitsPerChoice);
-// decoded = [1, 1, 0]`
-
+// decoded = [1, 1, 0]
 Paillier Cryptosystem
----------------------
-
 The Paillier cryptosystem supports partial homomorphic properties, enabling addition and multiplication of encrypted values without decrypting them. This capability ensures vote aggregation while maintaining voter confidentiality. Here's a simplified implementation for illustration purposes:
 
-### Disclaimer
-
+Disclaimer
 The following implementation is simplified and should not be used for security-critical applications.
 
-### Usage
-
-#### Generating Key Pair
-
+Usage
+Generating Key Pair
 javascript
-
 Copy code
+import { Paillier } from "phe-voting-js";
 
-`import { Paillier } from "phe-voting-js";
-
-const [pub, priv] = Paillier.generateKeyPair(256);`
-
-#### Encryption and Decryption
-
+const [pub, priv] = Paillier.generateKeyPair(256);
+Encryption and Decryption
 javascript
-
 Copy code
-
-`import { Paillier, bigInt } from "phe-voting-js";
+import { Paillier, bigInt } from "phe-voting-js";
 
 const plainMessage = bigInt(12345);
 const encryptedMessage = Paillier.encrypt(plainMessage, pub);
 
 const decryptedMessage = Paillier.decrypt(encryptedMessage, pub, priv);
-// decryptedMessage = 12345`
-
-#### Arithmetic Operations
-
+// decryptedMessage = 12345
+Arithmetic Operations
 javascript
-
 Copy code
-
-`import { Paillier, bigInt } from "phe-voting-js";
+import { Paillier, bigInt } from "phe-voting-js";
 
 const a = bigInt(1);
 const b = bigInt(2);
@@ -181,29 +152,21 @@ const bEncrypted = Paillier.encrypt(b, pub);
 
 const sumEncrypted = Paillier.addEncrypted(aEncrypted, bEncrypted, pub);
 const sum = Paillier.decrypt(sumEncrypted, pub, priv);
-// sum = 3`
-
-#### Signing and Verification
-
+// sum = 3
+Signing and Verification
 javascript
-
 Copy code
-
-`import { Paillier, bigInt } from "phe-voting-js";
+import { Paillier, bigInt } from "phe-voting-js";
 
 const m = bigInt(12345);
 const sig = Paillier.createSignature(m, pub, priv);
 
 const valid = Paillier.verifySignature(m, sig, pub);
-// valid should be true`
-
-#### Zero-Knowledge Proof
-
+// valid should be true
+Zero-Knowledge Proof
 javascript
-
 Copy code
-
-`import { Paillier, bigInt } from "phe-voting-js";
+import { Paillier, bigInt } from "phe-voting-js";
 
 const m = bigInt(12345);
 const valid = [bigInt(1), bigInt(12345)];
@@ -211,15 +174,10 @@ const invalid = [bigInt(1), bigInt(2)];
 
 const [c, commitment] = Paillier.encryptWithZkp(m, valid, pub);
 Paillier.verifyZkp(c, valid, commitment, pub); // true
-Paillier.verifyZkp(c, invalid, commitment, pub); // false`
-
+Paillier.verifyZkp(c, invalid, commitment, pub); // false
 Conclusion
-----------
-
 The secure voting system presented here demonstrates the application of Paillier encryption to preserve voter privacy while enabling accurate vote aggregation. Future enhancements could focus on enhancing voter anonymity and integrating blockchain technology for decentralized voting systems.
 
 References
-----------
-
--   [Paillier Cryptosystem - Wiki](https://en.wikipedia.org/wiki/Paillier_cryptosystem)
--   [Paillier Cryptosystem - Original Paper](https://link.springer.com/content/pdf/10.1007/3-540-48910-X_1.pdf)
+Paillier Cryptosystem - Wiki
+Paillier Cryptosystem - Original Paper
