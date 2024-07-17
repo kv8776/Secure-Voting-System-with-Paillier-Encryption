@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+Secure Voting System Using Paillier Homomorphic Encryption
+Overview
+This project implements a secure e-voting system leveraging Paillier homomorphic encryption to ensure the confidentiality and integrity of votes. Homomorphic encryption allows computations to be performed on encrypted data without decrypting it, making it ideal for scenarios where sensitive data (like votes) needs to be processed securely.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+How Paillier Homomorphic Encryption Works
+Paillier encryption involves two main keys: a public key (n, g) and a private key (lambda, mu). Here’s a brief overview of the encryption and decryption process:
 
-## Available Scripts
+Encryption
+Key Generation:
 
-In the project directory, you can run:
+Generate a random Paillier key pair (publicKey, privateKey).
+Encrypting Votes:
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Each voter’s choice (integer value representing a contestant) is encrypted using the public key.
+Encrypted vote: ciphertext = g^vote * r^n mod n^2, where r is a random value.
+Decryption
+Decryption by the Authority:
+Only the authority possessing the private key can decrypt the aggregated encrypted votes.
+Decryption of the encrypted votes is performed using the private key.
+Homomorphic Properties
+Additive Homomorphism:
+Allows adding of encrypted values: Enc(vote1) * Enc(vote2) mod n^2 = Enc(vote1 + vote2) mod n^2.
+Multiplicative Homomorphism:
+Allows multiplication of encrypted values by a scalar: Enc(vote)^k mod n^2 = Enc(vote * k) mod n^2.
+Security Considerations
+Confidentiality: Votes remain encrypted until decrypted by the authority.
+Integrity: Ensures that votes cannot be altered without detection.
+Authentication: Protects against unauthorized access to encryption keys.
+Implementation Details
+Key Generation: Use paillier-bigint library to generate and manage Paillier encryption keys.
+Server-Side: Express.js server handles key management, voting endpoints, and admin/user interactions.
+Client-Side: React.js components for admin and user interfaces interact with the server via API endpoints.
+Dependencies
+paillier-bigint: Library for Paillier Homomorphic Encryption.
+express: Web framework for Node.js to handle server-side operations.
+react: Frontend library for building user interfaces.
+Future Enhancements
+Zero-Knowledge Proofs: Implementing proofs to verify the validity of encrypted votes without revealing voter identities.
+Scalability: Enhancing system performance and scalability for large-scale elections.
+Contributing
+Contributions are welcome! Please fork the repository and submit pull requests for improvements and features.
